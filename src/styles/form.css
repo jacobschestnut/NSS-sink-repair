@@ -2,6 +2,23 @@
     margin: 30px;
 }
 
+.container--2 {
+    background-color: grey;
+    color: white;
+    margin-left: 30px;
+    padding: 7px 7px;
+}
+
+.container--3 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+span {
+    margin: 0 300px;
+}
+
 .field {
     display: flex;
     flex-direction: column;
@@ -17,3 +34,4 @@
     color: white;
     margin: 15px 0;
 }
+

@@ -1,6 +1,7 @@
 const applicationState = {
     requests: [],
-    plumbers: []
+    plumbers: [],
+    completions: []
 }
 
 const API = "http://localhost:8088"
@@ -27,7 +28,11 @@ export const getPlumbers = () => {
 }
 
 export const getRequests = () => {
-    return applicationState.requests.map(request => ({...request}))
+    return applicationState.requests.sort(request => ({...request}))
+}
+
+export const getCompletions = () => {
+    return applicationState.completions.map(completion => ({...completion}))
 }
 
 export const sendRequest = (userServiceRequest) => {
@@ -63,8 +68,28 @@ export const saveCompletion = (data) => {
         })
 }
 
+export const fetchCompletion = () => {
+    return fetch(`${API}/completions`)
+        .then(response => response.json())
+        .then(
+            (serviceRequests) => {
+                // Store the external state in application state
+                applicationState.completions = serviceRequests
+            }
+        )
+}
+
 export const deleteRequest = (id) => {
     return fetch(`${API}/requests/${id}`, { method: "DELETE" })
+        .then(
+            () => {
+                mainContainer.dispatchEvent(new CustomEvent("stateChanged"))
+            }
+        )
+}
+
+export const deleteCompletion = (id) => {
+    return fetch(`${API}/completions/${id}`, { method: "DELETE" })
         .then(
             () => {
                 mainContainer.dispatchEvent(new CustomEvent("stateChanged"))

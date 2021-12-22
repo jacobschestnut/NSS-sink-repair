@@ -10,5 +10,13 @@
     }
   ],
   "completions": [],
-  "requests": []
+  "requests": [
+    {
+      "description": "Test",
+      "address": "Test",
+      "budget": "1",
+      "neededBy": "0001-01-01",
+      "id": 1
+    }
+  ]
 }

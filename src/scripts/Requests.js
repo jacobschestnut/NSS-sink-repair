@@ -1,4 +1,4 @@
-import { getRequests, saveCompletion } from "./dataAccess.js"
+import { getRequests, saveCompletion} from "./dataAccess.js"
 import { deleteRequest } from "./dataAccess.js"
 import { getPlumbers } from "./dataAccess.js"
 
@@ -6,25 +6,21 @@ const convertRequestToListElement = (request) => {
     const plumbers = getPlumbers()
     return `
     <li>
-    ${request.description}
-    <select class="plumbers" id="plumbers">
-    <option value="">Choose</option>
-    ${
-        plumbers.map(
-            plumber => {
-                return `<option value="${request.id}--${plumber.id}">${plumber.name}</option>`
-            }
-            ).join("")
-        }
-        </select>
-            <button class="request__delete"
-                    id="request--${request.id}">
-                Delete
-            </button>
-        </li>
-        `
+        ${request.description}
+        <div="container--3">
+            <select class="plumbers" id="plumbers">
+            <option value="">Choose</option>
+            ${plumbers.map(plumber => {return `<option value="${request.id}--${plumber.id}--${request.description}">${plumber.name}</option>`}).join("")}
+            </select>
+                    
+                    <button class="request__delete"
+                            id="request--${request.id}">
+                        Delete
+                    </button>
+        </div>
+    </li>
+    `
 }
-
 
 export const Requests = () => {
     const requests = getRequests()
@@ -51,7 +47,7 @@ mainContainer.addEventListener(
     "change",
     (event) => {
         if (event.target.id === "plumbers") {
-            const [requestId, plumberId] = event.target.value.split("--")
+            const [requestId, plumberId, description] = event.target.value.split("--")
 
             /*
                 This object should have 3 properties
@@ -60,17 +56,22 @@ mainContainer.addEventListener(
                    3. date_created
             */
             const completion = { 
-                request: requestId,
-                plumber: plumberId,
+                rId: requestId,
+                plumberId: plumberId,
+                date_created: Date.now(),
+                description: description
             }
 
             saveCompletion(completion)
+                .then(() => {
+                    deleteRequest(parseInt(requestId))
+                })
             /*
                 Invoke the function that performs the POST request
                 to the `completions` resource for your API. Send the
                 completion object as a parameter.
              */
-
         }
     }
 )
+
